@@ -3,6 +3,7 @@ from models.players import Player
 from db import db
 from services.players import *
 from app import app
+
 # Paths
 players_2024_season = 'http://b8c40s8.143.198.70.30.sslip.io/api/PlayerDataTotals/query?season=2024&&pageSize=1000'
 players_2023_season = 'http://b8c40s8.143.198.70.30.sslip.io/api/PlayerDataTotals/query?season=2023&&pageSize=1000'
@@ -35,7 +36,6 @@ def create_player(players: list):
     season = iter_season()
     with app.app_context():
         for data in players:
-            # try:
             new_player = Player(
                 player_id=data["id"],
                 name=data["playerName"],
@@ -50,11 +50,10 @@ def create_player(players: list):
                 threePercent=data["threePercent"],
                 assists=data["assists"],
                 turnovers=data["turnovers"],
-                season=2022,
+                season=2024,
                 points_per_game=calc_points_per_game(data),
                 ATR=calc_ATR(data),
                 PPG_ratio=PPG_ratio(data, avg_per_position_2022)
-
             )
             print('created new player', new_player)
             db.session.add(new_player)
@@ -63,31 +62,4 @@ def create_player(players: list):
 
         print('finished adding player successfully')
 
-create_player(season_2022)
-    # return new_player.to_dict()
-    # except Exception as e:
-    #     db.session.rollback()
-    #     return {"error": str(e)}
-
-
-
-
-
-#
-# 'id': self.id,
-# 'player_id': self.player_id,
-# 'name': self.task,
-# 'team': self.due_date,
-# 'position': self.position,
-# 'games': self.games,
-# 'goals': self.goals,
-# 'points': self.points,
-# 'attempts': self.attempts,
-# 'fieldPercent': self.fieldPercent,
-# 'twoPercent': self.twoPercent,
-# 'threePercent': self.threePercent,
-# 'assists': self.assists,
-# 'turnovers': self.turnovers,
-# 'ATR': self.ATR,
-# 'points_per_game': self.points_per_game,
-# 'PPG_ratio': self.PPG_ratio,
+create_player(season_2024)

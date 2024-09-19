@@ -22,8 +22,6 @@ class Player(db.Model):
     season = db.Column(db.String(10), nullable=True)
     team_id = db.Column(db.Integer, db.ForeignKey('teams.id'), nullable=True)
 
-    # def __repr__(self):
-    #     return f'<Player {self.name} {self.email}>'
 
 
     def to_dict(self):
@@ -47,4 +45,18 @@ class Player(db.Model):
             'PPG_ratio': self.PPG_ratio,
             'season': self.season,
             'team_id': self.team_id
+        }
+
+
+class Team(db.Model):
+    __tablename__ = 'teams'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    players = db.relationship('Player', backref='group', lazy='dynamic')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'players': [player.to_dict() for player in self.players]
         }

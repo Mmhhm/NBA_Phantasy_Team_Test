@@ -1,8 +1,8 @@
 from os import abort
-
+from db import db
 from flask import Blueprint, request, jsonify, abort
 from services.players import *
-from models.players import Player
+from models.players import Player, Team
 
 players_bp = Blueprint('players', __name__)
 
@@ -31,6 +31,22 @@ def get_player_by_season():
         return jsonify([player.to_dict() for player in all_players if player.position == position])
     else:
         return jsonify([player.to_dict() for player in all_players])
+
+
+@players_bp.route('/teams', methods=['POST'])
+def create_team():
+    players = []
+    ids = request.get_json()['player_ids']
+    for id in ids:
+        players.append(Player.query.filter_by(id=id).first())
+    if len(request.json['player_ids']) != 5:
+        abort (400, description="Bad request")
+    if len({players[0].position, players[1].position, players[2].position, players[3].position, players[4].position}) != 5:
+        return jsonify({"message": "Duplicate positions are not allowed"}), 400
+    new_team = Team(name=request.json['team_name'], players=players)
+    db.session.add(new_team)
+    db.session.commit()
+    return jsonify(new_team.to_dict())
 
 
 

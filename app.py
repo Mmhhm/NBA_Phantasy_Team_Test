@@ -1,5 +1,6 @@
 from flask import Flask
 from blueprints.players import players_bp
+from blueprints.teams import *
 from db import db
 
 app = Flask(__name__)
@@ -18,7 +19,8 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-app.register_blueprint(players_bp, teams_bp)
+app.register_blueprint(players_bp)
+
 
 if __name__ == '__main__':
     app.run()
