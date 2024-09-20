@@ -1,4 +1,4 @@
-from flask import session
+from flask import request, abort
 
 from models.players import Player
 
@@ -56,6 +56,15 @@ def get_seasons(players, position):
                 continue
     return seasons
 
+
+def get_players(team_request):
+    return [Player.query.filter_by(id=player_id).first() for player_id in team_request.get_json()['player_ids']]
+
+def not_in_len(team_request):
+    return len(request.json['player_ids']) != 5
+
+def same_position(players):
+    return len({players[0].position, players[1].position, players[2].position, players[3].position, players[4].position}) != 5
 
 
 
