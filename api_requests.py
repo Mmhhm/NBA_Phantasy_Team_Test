@@ -13,7 +13,7 @@ players_2022_season = 'http://b8c40s8.143.198.70.30.sslip.io/api/PlayerDataTotal
 def requet_to_json(url):
     request = requests.get(url).json()
     return request
-print('hi')
+
 season_2022 = requet_to_json(players_2022_season)
 season_2023 = requet_to_json(players_2023_season)
 season_2024 = requet_to_json(players_2024_season)
@@ -29,8 +29,6 @@ def iter_season():
     iterate = iter(seasons)
     return next(iterate)
 
-
-print('hello')
 
 def create_player(players: list):
     season = iter_season()
@@ -59,7 +57,6 @@ def create_player(players: list):
             db.session.add(new_player)
             print('added player successfully')
         db.session.commit()
-
-        print('finished adding player successfully')
+        print('finished adding players successfully')
 
 create_player(season_2024)

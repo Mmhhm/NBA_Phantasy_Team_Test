@@ -1,6 +1,5 @@
 from flask import Flask
 from blueprints.players import players_bp
-from blueprints.teams import *
 from db import db
 
 app = Flask(__name__)
