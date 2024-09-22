@@ -31,32 +31,37 @@ def iter_season():
 
 
 def create_player(players: list):
-    season = iter_season()
+    seasons = {2022: avg_per_position_2022,
+               2023: avg_per_position_2023,
+               2024: avg_per_position_2024}
     with app.app_context():
-        for data in players:
-            new_player = Player(
-                player_id=data["id"],
-                name=data["playerName"],
-                team=data["team"],
-                position=data["position"],
-                games=data["games"],
-                goals=data["fieldGoals"],
-                points=data["points"],
-                attempts=data["fieldAttempts"],
-                fieldPercent=data["fieldPercent"],
-                twoPercent=data["twoPercent"],
-                threePercent=data["threePercent"],
-                assists=data["assists"],
-                turnovers=data["turnovers"],
-                season=2024,
-                points_per_game=calc_points_per_game(data),
-                ATR=calc_ATR(data),
-                PPG_ratio=PPG_ratio(data, avg_per_position_2022)
-            )
-            print('created new player', new_player)
-            db.session.add(new_player)
-            print('added player successfully')
+        for season in seasons:
+            counter = 0
+            for data in players[counter]:
+                new_player = Player(
+                    player_id=data["id"],
+                    name=data["playerName"],
+                    team=data["team"],
+                    position=data["position"],
+                    games=data["games"],
+                    goals=data["fieldGoals"],
+                    points=data["points"],
+                    attempts=data["fieldAttempts"],
+                    fieldPercent=data["fieldPercent"],
+                    twoPercent=data["twoPercent"],
+                    threePercent=data["threePercent"],
+                    assists=data["assists"],
+                    turnovers=data["turnovers"],
+                    season=season,
+                    points_per_game=calc_points_per_game(data),
+                    ATR=calc_ATR(data),
+                    PPG_ratio=PPG_ratio(data, seasons[season]),
+                )
+                print('created new player', new_player)
+                db.session.add(new_player)
+                print('added player successfully')
+            counter += 1
         db.session.commit()
         print('finished adding players successfully')
 
-create_player(season_2024)
+create_player([season_2022, season_2023, season_2024])

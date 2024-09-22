@@ -7,7 +7,6 @@ from models.players import Player, Team
 players_bp = Blueprint('players', __name__)
 
 
-
 @players_bp.route('/players', methods=['GET'])
 def get_player_by_season():
     position = request.args.get('position')
@@ -23,7 +22,6 @@ def get_player_by_season():
         return jsonify([player.to_dict() for player in all_players])
 
 
-
 @players_bp.route('/teams', methods=['POST'])
 def create_team():
     players = get_players(request)
@@ -35,6 +33,7 @@ def create_team():
     db.session.add(new_team)
     db.session.commit()
     return jsonify(new_team.to_dict())
+
 
 @players_bp.route('/teams/<int:team_id>', methods=['PUT'])
 def update_team(team_id):
@@ -50,6 +49,7 @@ def update_team(team_id):
     team.players = team_request
     db.session.commit()
     return jsonify({'message': 'Team updated successfully'}), 200
+
 
 @players_bp.route('/teams/<int:team_id>', methods=['DELETE'])
 def delete_team(team_id):
@@ -67,6 +67,7 @@ def get_team_by_id(team_id):
     if not team:
         abort(404, description="Team not found")
     return jsonify(team.to_dict())
+
 
 @players_bp.route('/teams', methods=['GET'])
 def get_teams():
